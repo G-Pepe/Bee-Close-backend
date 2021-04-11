@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 //const CommentSchema = require("./CommentSchema");
 
 const PostSchema = new mongoose.Schema({
-  user_id: { type: mongoose.Schema.Types.ObjectId, required: true },
+  user: {ref:'Users', type: mongoose.Schema.Types.ObjectId, required: true },
   text: { type: String, required: true },
   image: {
     type: String,
