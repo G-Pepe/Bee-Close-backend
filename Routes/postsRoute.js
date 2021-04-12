@@ -4,7 +4,6 @@ const Users = require("../Models/userSchema");
 const Hives = require("../Models/hiveSchema");
 const router = express.Router();
 const auth = require('../Middlewares/authJwt');
-const { timeStamp } = require("node:console");
 
 // adding a new post
 router.post("/newpost/",auth, async (req, res, next) => {
