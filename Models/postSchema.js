@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 //const CommentSchema = require("./CommentSchema");
 
 const PostSchema = new mongoose.Schema({
-  user: {ref:'Users', type: mongoose.Schema.Types.ObjectId, required: true },
+  user: {ref:'Users' , type: mongoose.Schema.Types.ObjectId, required: true },
   text: { type: String, required: true },
   image: {
     type: String,
@@ -10,10 +10,10 @@ const PostSchema = new mongoose.Schema({
       "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png",
   },
   timestamp: { type: Date, default: Date.now },
-  categories: {
+  category: {
     type: String,
-    Enum: ["general", "support", "miscellaneous"],
-    default: "miscellaneous",
+    Enum: ["regular", "event", "giveaway"],
+    default: "regular",
   },
   comments: [
     {

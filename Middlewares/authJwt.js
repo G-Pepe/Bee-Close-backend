@@ -2,24 +2,27 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const User = require("../Models/userSchema");
 dotenv.config()
-authJwt = (req, res, next) => {
-  let token = req.headers["x-access-token"];
+auth = (req, res, next) => {
+  const authHeader = req.headers["Authorization"];
+    if (authHeader) {
+    const token = authHeader.split(" ")[1];
+    
 
-  if (!token) {
-    return res.status(403).send({ message: "No token provided!" });
-  }
-
-  jwt.verify(token, process.env.SECRET, (err, decoded) => {
-   
-    if (err) {
-      return res.status(401).send({ message: "Unauthorized!" });
+    if (token==null) {
+      return res.status(403).send({ message: "No token provided!" });
     }
-   req.userId = decoded.id;
 
-  });
-    next();
-  };
+    jwt.verify(token, process.env.SECRET, (err, decoded) => {
+      if (err) {
+        return res.status(401).send({ message: "Unauthorized!" });
+      }
+      req.userId = decoded.userId;
+      req.hiveId = decoded.hiveId;
+      next();
+    });
+  }
+};
 
   
 
-  module.exports = authJwt;
+  module.exports = auth;

@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Hives = require("../Models/hiveSchema");
-
+const auth = require('../Middlewares/authJwt')
 // creating/joining an hive
-router.post("/joinhive/:userId", async (req, res, next) => {
+router.post("/joinhive/:userId",auth, async (req, res, next) => {
   const { address } = req.body; // we can remove this line
   const { userId } = req.params;
 
@@ -38,7 +38,7 @@ router.post("/joinhive/:userId", async (req, res, next) => {
   }
 });
 
-router.get("/findhive/:hiveId", async (req, res, next) => {
+router.get("/findhive/:hiveId",auth, async (req, res, next) => {
   const { hiveId } = req.params;
   try {
     const singleHive = await Hives.findById(hiveId)
