@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   email: { type: String, required: true },
   street: { type: String, required: true },
-  country:{type:String},
+  country: { type: String },
   city: { type: String },
   houseNumber: { type: String, required: true },
   postCode: { type: String, required: true },
@@ -17,6 +17,10 @@ const UserSchema = new mongoose.Schema({
   dateOfBirth: { type: Date },
   phoneNumber: { type: String },
   gender: { type: String, enum: ["Male", "Female", "N/A"], default: "N/A" },
+  hiveId: {
+    ref: "Hives",
+    type: mongoose.Schema.Types.ObjectId,
+  },
 });
 
 // hashing password just before storing into database
