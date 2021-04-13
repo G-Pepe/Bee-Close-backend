@@ -11,6 +11,9 @@ router.post("/joinhive/:userId", auth, async (req, res, next) => {
     const user = await Users.findOne({
       _id: userId,
     });
+
+    console.log(user);
+
     const existingHive = await Hives.findOne({
       "address.street": user.address.street,
       "address.houseNumber": user.address.houseNumber,
