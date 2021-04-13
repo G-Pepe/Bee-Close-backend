@@ -12,10 +12,14 @@ router.post("/joinhive/:userId", async (req, res, next) => {
       _id: userId,
     });
 
+    if(!user) {
+      throw 'User not found';
+    }
+
     const existingHive = await Hives.findOne({
-      "address.street": user.address.street,
-      "address.houseNumber": user.address.houseNumber,
-      "address.postalCode": user.address.postalCode,
+      "address.street": user.street,
+      "address.houseNumber": user.houseNumber,
+      "address.postalCode": user.postalCode,
     });
     if (existingHive) {
       await existingHive.update({ $push: { users: userId } });
@@ -28,7 +32,12 @@ router.post("/joinhive/:userId", async (req, res, next) => {
         });
     }
     await Hives.create({
-      address: user.address,
+      address: {
+        street: user.street,
+        houseNumber: user.houseNumber,
+        postalCode: user.postCode,
+        city: user.city
+      },
       secretKey: "randomSecretKey",
       users: [userId],
       posts: [],
@@ -40,7 +49,7 @@ router.post("/joinhive/:userId", async (req, res, next) => {
         success: true,
       });
   } catch (err) {
-    next(err);
+    res.status(500).send({ message: err });
   }
 });
 router.get("/findhive/:hiveId", auth, async (req, res, next) => {
