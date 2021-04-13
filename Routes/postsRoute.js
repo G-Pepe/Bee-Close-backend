@@ -3,11 +3,10 @@ const Posts = require("../Models/postSchema");
 const Users = require("../Models/userSchema");
 const Hives = require("../Models/hiveSchema");
 const router = express.Router();
-const auth = require('../Middlewares/authJwt');
+const auth = require("../Middlewares/authJwt");
 
 // adding a new post
-router.post("/newpost/",auth, async (req, res, next) => {
-  
+router.post("/newpost", auth, async (req, res, next) => {
   // no need to use hive id
   // read the user id from the token
   // find the hive id from the user
@@ -20,10 +19,10 @@ router.post("/newpost/",auth, async (req, res, next) => {
     }
 
     const post = await Posts.create({
-      user:req.userId,
-      text:req.body.text,
+      user: req.userId,
+      text: req.body.text,
       category: req.body.category,
-      comments:[]
+      comments: [],
     });
 
     const hiveToUpdate = await Hives.findById(req.hiveId);
@@ -44,10 +43,11 @@ router.post("/newpost/",auth, async (req, res, next) => {
 });
 
 // getting all existing posts
-router.get("/:type",auth, async (req, res, next) => {
+router.get("/:type", auth, async (req, res, next) => {
   try {
-    
-    let allPosts = await Posts.find({category:req.params.type}).populate('user');
+    let allPosts = await Posts.find({ category: req.params.type }).populate(
+      "user"
+    );
     res.status(200).send({ success: true, allPosts });
   } catch (err) {
     next(err);
@@ -56,7 +56,7 @@ router.get("/:type",auth, async (req, res, next) => {
 
 // updating/modifying one single post
 
-router.put("/:id",auth, async (req, res, next) => {
+router.put("/:id", auth, async (req, res, next) => {
   const { id } = req.params;
   try {
     const comment = await Posts.findByIdAndUpdate(id, req.body, {
@@ -69,7 +69,7 @@ router.put("/:id",auth, async (req, res, next) => {
 });
 
 // deleting one single post
-router.delete("/:id",auth, async (req, res, next) => {
+router.delete("/:id", auth, async (req, res, next) => {
   const { id } = req.params;
   try {
     const PostDeleted = await Posts.findByIdAndRemove(id);
