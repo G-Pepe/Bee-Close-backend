@@ -18,8 +18,8 @@ router.post("/signup", async (req, res, next) => {
         return res.status(400).send({ message: "user already registered" });
       } else {
         const newUser = new User(req.body);
-        newUser.save();
-        res.status(200).send({ message: "User registered successfully" });
+       await newUser.save();
+        res.status(200).send({ message: "User registered successfully", success: true, user: newUser });
         
       }
     });
