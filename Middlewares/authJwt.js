@@ -2,11 +2,14 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const User = require("../Models/userSchema");
 dotenv.config()
-auth = (req, res, next) => {
+
+const auth = (req, res, next) => {
   const authHeader = req.headers["Authorization"];
+
+  console.log(authHeader)
+
     if (authHeader) {
     const token = authHeader.split(" ")[1];
-    
 
     if (token==null) {
       return res.status(403).send({ message: "No token provided!" });
@@ -23,6 +26,4 @@ auth = (req, res, next) => {
   }
 };
 
-  
-
-  module.exports = auth;
+module.exports = auth;

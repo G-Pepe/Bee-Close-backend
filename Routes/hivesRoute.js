@@ -4,15 +4,13 @@ const Hives = require("../Models/hiveSchema");
 const Users = require("../Models/userSchema");
 const auth = require("../Middlewares/authJwt");
 // creating/joining an hive
-router.post("/joinhive/:userId", auth, async (req, res, next) => {
+router.post("/joinhive/:userId", async (req, res, next) => {
   const { userId } = req.params;
   // TODO normalise / sanitise street
   try {
     const user = await Users.findOne({
       _id: userId,
     });
-
-    console.log(user);
 
     const existingHive = await Hives.findOne({
       "address.street": user.address.street,
