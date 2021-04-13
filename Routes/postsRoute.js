@@ -12,7 +12,7 @@ router.post("/newpost", auth, async (req, res, next) => {
   // find the hive id from the user
 
   try {
-    const user = await Users.findById(req.body.user_id); // get user id from token
+    const user = await Users.findById(req.userId); // get user id from token
 
     if (!user) {
       throw "User not found";
