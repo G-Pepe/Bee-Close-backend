@@ -1,13 +1,12 @@
 const express = require("express");
 const User = require("../Models/userSchema");
-const hive = require('../Models/hiveSchema');
+const Hive = require("../Models/hiveSchema");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
-const auth= require("../Middlewares/authJwt")
-
+const auth = require("../Middlewares/authJwt");
 
 router.post("/signup", async (req, res, next) => {
   try {
@@ -24,38 +23,43 @@ router.post("/signup", async (req, res, next) => {
 
     const newUser = await User.create(req.body);
 
-    res.status(200).send({ message: "User registered successfully", success: true, user: newUser });
+    res.status(200).send({
+      message: "User registered successfully",
+      success: true,
+      user: newUser,
+    });
   } catch (err) {
     next(err);
   }
 });
 
-
-router.post("/login",(req, res, next) => {
+router.post("/login", async (req, res, next) => {
   try {
-    User.findOne({
+    const user = await User.findOne({
       email: req.body.email,
-    }).then((user) => {
-      if (!user) {
-        return res.status(401).send({ message: "incorrect email or password" });
-      } else {
-        /* console.log(req.body);
-        console.log(user); */
-        let match = bcrypt.compareSync(req.body.password, user.password);
-        if (!match) {
-          return res
-            .status(401)
-            .send({ message: "incorrect password or email" });
-        } else {
-          hive.find({ "users._id": user._id }).then( hive=> {
-            let token = jwt.sign({userId: user._id, email: user.email, hiveId: hive._id }, process.env.SECRET)
-            res.status(200)
-            .header("x-auth", token)
-            .send({ message: "login successful", success: true, user: user, token:token })
-          }
-          ) 
-        }
-      }
+    });
+
+    if (!user) {
+      return res.status(401).send({ message: "incorrect email or password" });
+    }
+
+    let match = await bcrypt.compareSync(req.body.password, user.password);
+    if (!match) {
+      return res.status(401).send({ message: "incorrect password or email" });
+    }
+
+    const hive = await Hive.findOne({ users: user._id });
+
+    console.log(hive);
+    let token = jwt.sign(
+      { userId: user._id, email: user.email, hiveId: hive._id },
+      process.env.SECRET
+    );
+    res.status(200).header("x-auth", token).send({
+      message: "login successful",
+      success: true,
+      user: user,
+      token: token,
     });
   } catch (err) {
     next(err);
