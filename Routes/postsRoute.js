@@ -42,12 +42,15 @@ router.post("/newpost", auth, async (req, res, next) => {
   }
 });
 
-// getting all existing posts
+// getting all existing posts based on hiveId
 router.get("/:type", auth, async (req, res, next) => {
   try {
-    let allPosts = await Posts.find({ category: req.params.type }).populate(
-      "user"
+    let hive = await Hives.findById(req.hiveId).populate("posts");
+
+    let allPosts = hive.posts.filter(
+      (item) => item.category === req.params.type
     );
+
     res.status(200).send({ success: true, allPosts });
   } catch (err) {
     next(err);

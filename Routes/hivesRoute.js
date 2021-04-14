@@ -3,6 +3,7 @@ const router = express.Router();
 const Hives = require("../Models/hiveSchema");
 const Users = require("../Models/userSchema");
 const auth = require("../Middlewares/authJwt");
+
 // creating/joining an hive
 router.post("/joinhive/:userId", async (req, res, next) => {
   const { userId } = req.params;
