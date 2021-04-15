@@ -82,7 +82,9 @@ router.get("/singleBee", auth, async (req, res, next) => {
 
 router.get("/beesInMyHive", auth, async (req, res, next) => {
   try {
-    const beesInMyHive = await User.find();
+    const beesInMyHive = await User.find({ hiveId: req.hiveId }).populate(
+      "users"
+    );
 
     if (!beesInMyHive) {
       return res
