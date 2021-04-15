@@ -80,4 +80,20 @@ router.get("/singleBee", auth, async (req, res, next) => {
   }
 });
 
+router.get("/beesInMyHive", auth, async (req, res, next) => {
+  try {
+    const beesInMyHive = await User.find();
+
+    if (!beesInMyHive) {
+      return res
+        .status(401)
+        .send({ message: "There is no bee in the hive", success: false });
+    }
+
+    res.status(200).send({ success: true, beesInMyHive });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;
