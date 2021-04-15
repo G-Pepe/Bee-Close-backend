@@ -7,10 +7,6 @@ const auth = require("../Middlewares/authJwt");
 
 // adding a new post
 router.post("/newpost", auth, async (req, res, next) => {
-  // no need to use hive id
-  // read the user id from the token
-  // find the hive id from the user
-
   try {
     const user = await Users.findById(req.userId); // get user id from token
 
@@ -23,6 +19,7 @@ router.post("/newpost", auth, async (req, res, next) => {
       text: req.body.text,
       category: req.body.category,
       comments: [],
+      hiveId: req.hiveId,
     });
 
     const hiveToUpdate = await Hives.findById(req.hiveId);
@@ -46,13 +43,12 @@ router.post("/newpost", auth, async (req, res, next) => {
 router.get("/:type", auth, async (req, res, next) => {
   console.log(req.hiveId);
   console.log(req.userId);
-  const hive = await Hives.findById(req.hiveId).populate("posts");
-  try {
-    console.log(hive);
+  //const hive = await Hives.findById(req.hiveId).populate("posts");
 
-    let allPosts = hive.posts.filter(
-      (item) => item.category === req.params.type
-    );
+  try {
+    const posts = await Posts.find({ hiveId: req.hiveId }).populate("users");
+
+    let allPosts = posts.filter((item) => item.category === req.params.type);
 
     res.status(200).send({ success: true, allPosts });
   } catch (err) {

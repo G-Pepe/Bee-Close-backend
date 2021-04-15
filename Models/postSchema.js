@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 //const CommentSchema = require("./CommentSchema");
 
 const PostSchema = new mongoose.Schema({
-  user: {ref:'Users' , type: mongoose.Schema.Types.ObjectId, required: true },
+  user: { ref: "Users", type: mongoose.Schema.Types.ObjectId, required: true },
   text: { type: String, required: true },
   image: {
     type: String,
@@ -23,6 +23,10 @@ const PostSchema = new mongoose.Schema({
       replies: [{}],
     },
   ],
+  hiveId: {
+    ref: "Hives",
+    type: mongoose.Schema.Types.ObjectId,
+  },
 });
 
 module.exports = mongoose.model("Posts", PostSchema);
