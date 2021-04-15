@@ -66,4 +66,20 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
+router.get("/singleBee", auth, (req, res, next) => {
+
+  try{ 
+const singleBee = await User.findById(req.userId)
+
+if (!singleBee) {
+  return res.status(401).send({message: "bee not found", success: false})
+}
+
+res.status(200).send({success: true, user: singleBee})
+
+  } catch (err){
+next(err)
+  }
+})
+
 module.exports = router;
