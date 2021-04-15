@@ -12,16 +12,15 @@ router.post("/joinhive/:userId", async (req, res, next) => {
     const user = await Users.findOne({
       _id: userId,
     });
-
     if (!user) {
       throw "User not found";
     }
-
     const existingHive = await Hives.findOne({
       "address.street": user.street,
       "address.houseNumber": user.houseNumber,
-      "address.postalCode": user.postalCode,
+      "address.postalCode": user.postCode,
     });
+    console.log(existingHive);
     if (existingHive) {
       await existingHive.update({ $push: { users: userId } });
       console.log("existing hive", existingHive);
@@ -29,22 +28,23 @@ router.post("/joinhive/:userId", async (req, res, next) => {
         message: "User successfully added to his hive",
         success: true,
       });
+    } else {
+      await Hives.create({
+        address: {
+          street: user.street,
+          houseNumber: user.houseNumber,
+          postalCode: user.postCode,
+          city: user.city,
+        },
+        secretKey: "randomSecretKey",
+        users: [userId],
+        posts: [],
+      });
+      res.status(200).send({
+        message: "Congratulation: you have created your hive",
+        success: true,
+      });
     }
-    await Hives.create({
-      address: {
-        street: user.street,
-        houseNumber: user.houseNumber,
-        postalCode: user.postCode,
-        city: user.city,
-      },
-      secretKey: "randomSecretKey",
-      users: [userId],
-      posts: [],
-    });
-    res.status(200).send({
-      message: "Congratulation: you have created your hive",
-      success: true,
-    });
   } catch (err) {
     res.status(500).send({ message: err });
   }
