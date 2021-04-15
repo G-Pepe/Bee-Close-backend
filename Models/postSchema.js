@@ -4,11 +4,7 @@ const mongoose = require("mongoose");
 const PostSchema = new mongoose.Schema({
   user: { ref: "Users", type: mongoose.Schema.Types.ObjectId, required: true },
   text: { type: String, required: true },
-  image: {
-    type: String,
-    default:
-      "https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png",
-  },
+  image: { type: String },
   timestamp: { type: Date, default: Date.now },
   category: {
     type: String,
