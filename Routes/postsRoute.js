@@ -46,7 +46,7 @@ router.get("/:type", auth, async (req, res, next) => {
   //const hive = await Hives.findById(req.hiveId).populate("posts");
 
   try {
-    const posts = await Posts.find({ hiveId: req.hiveId }).populate("users");
+    const posts = await Posts.find({ hiveId: req.hiveId }).populate("user");
 
     let allPosts = posts.filter((item) => item.category === req.params.type);
 
