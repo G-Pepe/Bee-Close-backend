@@ -56,6 +56,17 @@ router.get("/:type", auth, async (req, res, next) => {
   }
 });
 
+// get single post router
+router.get("/getsinglepost/:id", auth, async (req, res, next)=> {
+  const { id } = req.params;
+  try {
+    const post = await Posts.findById(id);
+    res.status(200).send({ success: true, post });
+  } catch (err) {
+    next(err);
+  }
+})
+
 // updating/modifying one single post
 
 router.put("/:id", auth, async (req, res, next) => {
