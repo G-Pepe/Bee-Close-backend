@@ -96,4 +96,24 @@ router.get("/beesInMyHive", auth, async (req, res, next) => {
   }
 });
 
+router.put("/updateprofile", auth, async (req, res, next) => {
+  try {
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.status(400).send({ message: "user not registered" });
+    }
+
+    await user.update({ ...req.body })
+
+    res.status(200).send({
+      message: "User updated successfully",
+      success: true,
+    });
+  } catch (err) {
+    next(err);
+  }
+
+})
+
 module.exports = router;
