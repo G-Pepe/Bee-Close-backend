@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema({
   city: { type: String },
   houseNumber: { type: String, required: true },
   postCode: { type: String, required: true },
-  photo: { type: String, url: "https://picsum.photos/seed/picsum/200/300" },
+  photo: { type: String, default: "https://picsum.photos/seed/picsum/200/300" },
   dateOfBirth: { type: Date },
   phoneNumber: { type: String },
   gender: { type: String, enum: ["Male", "Female", "N/A"], default: "N/A" },
