@@ -11,6 +11,7 @@ const UserSchema = new mongoose.Schema({
   street: { type: String, required: true },
   country: { type: String },
   city: { type: String },
+  aboutBee: { type: String },
   houseNumber: { type: String, required: true },
   postCode: { type: String, required: true },
   photo: { type: String, default: "https://picsum.photos/seed/picsum/200/300" },
